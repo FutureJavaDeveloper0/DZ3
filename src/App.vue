@@ -1,24 +1,31 @@
 <script setup>
-import {ref} from "vue";
+import { ref } from "vue";
 import style from "./cardStyle.module.css";
+import Card from "./components/Card/Card.vue";
 
 const cars = ref([
-  {car: "Toyota"},
-  {car: "BMW"},
-  {car: "Mercedes"},
-  {car: "Lamborghini"},
-  {car: "Tokada"},
+  { car: "Toyota" },
+  { car: "BMW" },
+  { car: "Mercedes" },
+  { car: "Lamborghini" },
+  { car: "Tokada" },
 ]);
-// const cars = ref(["car1","car2","car3"]);
-const text = ref("");
 
+const input = ref("");
+function getIsVisible(car) {
+  return car.toLowerCase().includes(input.value.toLowerCase());
+}
 </script>
 
 <template>
-  <input type="text" v-model="text"/>
-  <template  v-for="{car} in cars" :key="car.value">
-    <div  :class = "style.car" v-if="car.toLowerCase().includes(text.toLocaleLowerCase())">
+  <input v-model="input" />
+  <template v-for="({ car }, i) in cars">
+    <div :class="style.car" v-if="getIsVisible(car)">
       <h1>{{ car }}</h1>
+      <Card v-slot="{ quantity }">
+        <h2>Click to purchase </h2>
+        <p>Quantity in stock {{ quantity * (i + 1) }}</p>
+      </Card>
     </div>
   </template>
 </template>
